@@ -1,5 +1,5 @@
 import electronUpdater, { UpdateInfo } from 'electron-updater'
-import { showUpdaterWindow, windows } from './window'
+// import { showUpdaterWindow, windows } from './window'
 import { MenuItem, dialog } from 'electron'
 
 electronUpdater.autoUpdater.fullChangelog = true
@@ -28,24 +28,24 @@ function enableMenuItem() {
 
 export function init() {
   electronUpdater.autoUpdater.addListener('update-downloaded', () => {
-    const window = windows.get('updater')
-    if (window) {
-      window.webContents.send('update-downloaded')
-    }
+    // const window = windows.get('updater')
+    // if (window) {
+    //   window.webContents.send('update-downloaded')
+    // }
   })
 
   electronUpdater.autoUpdater.addListener('update-not-available', () => {
     updateInfo = null
     enableMenuItem()
-    const window = windows.get('updater')
-    window?.close()
+    // const window = windows.get('updater')
+    // window?.close()
   })
 
   electronUpdater.autoUpdater.addListener('download-progress', (info) => {
-    const window = windows.get('updater')
-    if (window) {
-      window.webContents.send('download-progress', info)
-    }
+    // const window = windows.get('updater')
+    // if (window) {
+    //   window.webContents.send('download-progress', info)
+    // }
   })
 }
 
@@ -66,7 +66,7 @@ export async function checkForUpdatesMenuItem(_menuItem: MenuItem) {
     electronUpdater.autoUpdater.currentVersion.compare(updates.updateInfo.version) === -1
   ) {
     updateInfo = updates.updateInfo
-    showUpdaterWindow()
+    // showUpdaterWindow()
   } else {
     updateInfo = null
     await dialog.showMessageBox({

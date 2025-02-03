@@ -4,7 +4,7 @@ import { Label } from '../../components/ui/label'
 import { Input } from '../../components/ui/input'
 import { Button } from '../../components/ui/button'
 
-import { Plug } from 'lucide-react'
+import { Loader2Icon, Plug } from 'lucide-react'
 import ImportUrlDialog from './import-url-dialog'
 import { useCreateConnection } from './hooks/use-create-connection'
 
@@ -15,13 +15,14 @@ const CreateConnection = () => {
     urlInput,
     setUrlInput,
     handleImport,
-    handleImportAndConnect,
+    handleConnect,
     hostInputRef,
     portInputRef,
     userInputRef,
     passwordInputRef,
     databaseInputRef,
-    nicknameInputRef
+    nicknameInputRef,
+    isConnecting
   } = useCreateConnection()
 
   return (
@@ -33,7 +34,7 @@ const CreateConnection = () => {
         </CardHeader>
         <CardContent>
           <form className="grid w-full items-center gap-4 grid-cols-2">
-          <div className="flex flex-col space-y-1.5 col-span-2">
+            <div className="flex flex-col space-y-1.5 col-span-2">
               <Label htmlFor="nickname">Nickname</Label>
               <Input id="nickname" ref={nicknameInputRef} placeholder="Enter connection nickname" />
             </div>
@@ -71,12 +72,15 @@ const CreateConnection = () => {
             urlInput={urlInput}
             onUrlInputChange={(value) => setUrlInput(value)}
             onImport={handleImport}
-            onImportAndConnect={handleImportAndConnect}
           />
-          <Button variant="default">
-            {' '}
-            <Plug />
-            Connect
+          <Button
+            variant="default"
+            onClick={handleConnect}
+            disabled={isConnecting}
+            className="transition-all duration-300"
+          >
+            {isConnecting ? <Loader2Icon className="animate-spin" /> : <Plug />}
+            {isConnecting ? 'Connecting...' : 'Connect'}
           </Button>
         </CardFooter>
       </Card>

@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/sidebar"
 import {Separator} from "../../components/ui/separator"
 import {ThemeToggle} from "../../components/theme-switcher"
+import {actionsProxy} from "@/lib/action-proxy"
+import Brand from "@/components/brand"
 
 // This is sample data.
 const data = {
@@ -39,6 +41,7 @@ const data = {
 }
 
 export function ConnectionList({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const {data:connections, isLoading} = actionsProxy.getConnections.useQuery();
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -46,12 +49,7 @@ export function ConnectionList({ ...props }: React.ComponentProps<typeof Sidebar
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <a href="#">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                  <DatabaseZapIcon className="size-5" />
-                </div>
-                <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-semibold">DB Client</span>
-                </div>
+                <Brand />
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -68,12 +66,12 @@ export function ConnectionList({ ...props }: React.ComponentProps<typeof Sidebar
                     {item.title}
                   </span>
                 </SidebarGroupLabel>
-                {item.items?.length ? (
+                {connections?.length ? (
                   <SidebarMenuSub>
-                    {item.items.map((item) => (
-                      <SidebarMenuSubItem key={item.title}>
+                    {connections.map((item) => (
+                      <SidebarMenuSubItem key={item.id}>
                         <SidebarMenuSubButton asChild>
-                          <a href={item.url}>{item.title}</a>
+                          <a href={`/connection/${item.id}`}>{item.nickname || item.database}</a>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}

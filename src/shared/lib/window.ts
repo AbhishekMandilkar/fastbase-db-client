@@ -1,5 +1,5 @@
 import { BrowserWindow, BrowserWindowConstructorOptions, shell } from 'electron'
-import icon from '../../resources/icon.png?asset'
+import icon from '../../../resources/icon.png?asset'
 import path from 'path'
 import { disableCors } from './cors'
 
@@ -21,14 +21,12 @@ const createWindow = ({
     width: 900,
     height: 670,
     show: false,
-    autoHideMenuBar: true,
-    titleBarStyle: 'hiddenInset',
+    autoHideMenuBar: false,
     ...(process.platform === 'linux' ? { icon } : {}),
     ...windowOptions,
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.mjs'),
       sandbox: false,
-      spellcheck: false
     }
   })
 

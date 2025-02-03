@@ -19,7 +19,6 @@ interface ImportUrlDialogProps {
   urlInput: string
   onUrlInputChange: (value: string) => void
   onImport: () => void
-  onImportAndConnect: () => void
 }
 
 const ImportUrlDialog: React.FC<ImportUrlDialogProps> = ({
@@ -28,7 +27,6 @@ const ImportUrlDialog: React.FC<ImportUrlDialogProps> = ({
   urlInput,
   onUrlInputChange,
   onImport,
-  onImportAndConnect
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -58,9 +56,6 @@ const ImportUrlDialog: React.FC<ImportUrlDialogProps> = ({
         <DialogFooter>
           <Button variant="outline" onClick={onImport}>
             Import
-          </Button>
-          <Button onClick={onImportAndConnect}>
-            Import & Connect
           </Button>
         </DialogFooter>
       </DialogContent>

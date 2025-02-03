@@ -57,3 +57,15 @@ export type Config = {
   deepseekApiKey?: string
   model?: string
 }
+
+export type Column = {
+  name: string;
+  type: string;
+  nullable: boolean;
+  default: string | null;
+}
+
+export type TableWithColumns = {
+  name: string;
+  columns: Column[];
+}

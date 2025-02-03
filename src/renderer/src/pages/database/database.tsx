@@ -1,8 +1,13 @@
-import React from 'react'
+import {AppSidebar} from '@/components/app-sidebar'
+import Breadcrumbs from '@/components/breadcrumbs'
+import {Outlet} from 'react-router'
 
 const Database = () => {
   return (
-    <div>Database</div>
+    <div className="flex h-screen w-full">
+      <AppSidebar />
+      <Outlet />
+    </div>
   )
 }
 
