@@ -1,5 +1,3 @@
-
-
 import { sqliteTable, text, integer, index } from 'drizzle-orm/sqlite-core'
 import { customAlphabet } from 'nanoid'
 import {ConnectionConfig, ConnectionType} from '../types'

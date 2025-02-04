@@ -4,6 +4,9 @@ import { appDB, appSchema } from '../../../../../shared/lib/app-db'
 import { Connection, ConnectionConfig } from '../../../../../shared/types'
 import Url from 'url-parse'
 import { actionsProxy } from '@/lib/action-proxy'
+import { useNavigate } from "react-router";
+import {useDatabaseDispatch} from '@/pages/database/slice/database-slice'
+
 
 export const useCreateConnection = () => {
   const [urlInput, setUrlInput] = useState('')
@@ -15,13 +18,21 @@ export const useCreateConnection = () => {
   const userInputRef = useRef<HTMLInputElement>(null)
   const passwordInputRef = useRef<HTMLInputElement>(null)
   const databaseInputRef = useRef<HTMLInputElement>(null)
+  const navigation = useNavigate()
   const nicknameInputRef = useRef<HTMLInputElement>(null)
 
+
+
   const createConnection = actionsProxy.createConnection.useMutation({
-    onSuccess(_, variables) {
-      console.log('createConnection', variables)
+    async onSuccess(_, variables) {
+      try {
+        await actionsProxy.createConnection.invoke(variables)
+        navigation(`/connection/${variables.id}`)
+      } catch (error) {
+        console.error('Failed to create connection:', error)
+      }
     }
-  });
+  })
 
   const parseAndFillForm = (connectionUrl: string) => {
     try {

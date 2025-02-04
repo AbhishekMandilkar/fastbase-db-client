@@ -19,31 +19,49 @@ import {Separator} from "../../components/ui/separator"
 import {ThemeToggle} from "../../components/theme-switcher"
 import {actionsProxy} from "@/lib/action-proxy"
 import Brand from "@/components/brand"
+import {Connection} from "src/shared/types"
+import {useDatabaseDispatch} from "../database/slice/database-slice"
+import {useNavigate} from "react-router"
+import useConnectDatabase from "../database/hooks/use-connect-database"
+import {toast} from "sonner"
 
 // This is sample data.
 const data = {
   navMain: [
     {
-      title: "Connections",
+      title: "RecentConnections",
       url: "#",
-      items: [
-        {
-          title: "PostgreSQL",
-          url: "#",
-        },
-        {
-          title: "MySQL",
-          url: "#",
-        },
-      ]
     },
+    {
+      title: "Favorites",
+      url: "#",
+    }
   ],
 }
 
 export function ConnectionList({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const {data:connections, isLoading} = actionsProxy.getConnections.useQuery();
+  const navigate = useNavigate();
+  const {handleConnect, isConnecting} = useConnectDatabase();
+
+  const handleSelectDatabase = async (connection: Connection) => {
+    toast.promise(
+      async () => {
+        const { success } = await handleConnect(connection.id)
+        if (success) {
+          navigate(`/connection/${connection.id}`)
+        }
+      },
+      {
+        loading: 'Connecting...',
+        success: 'Connected',
+        error: 'Failed to connect'
+      }
+    )
+  }
+
   return (
-    <Sidebar {...props}>
+    <Sidebar {...props} >
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -70,8 +88,8 @@ export function ConnectionList({ ...props }: React.ComponentProps<typeof Sidebar
                   <SidebarMenuSub>
                     {connections.map((item) => (
                       <SidebarMenuSubItem key={item.id}>
-                        <SidebarMenuSubButton asChild>
-                          <a href={`/connection/${item.id}`}>{item.nickname || item.database}</a>
+                        <SidebarMenuSubButton onClick={() => handleSelectDatabase(item)} className="cursor-pointer">
+                          {item.nickname || item.database}
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}

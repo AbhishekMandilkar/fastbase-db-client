@@ -10,7 +10,9 @@ import { Provider } from 'react-redux'
 import TablesView from './pages/database/tables-view/tables-view'
 import TableExplorer from './components/database/table-explorer/table-explorer'
 import SqlQueriesView from './pages/database/sql-queries-view/sql-queries-view'
-
+import ErrorBoundary from './components/error-boundry'
+import DatabaseError from './pages/database/database-error'
+import {Toaster} from 'sonner'
 
 function App(): JSX.Element {
   return (
@@ -37,6 +39,7 @@ function App(): JSX.Element {
           </ThemeProvider>
         </BrowserRouter>
       </Provider>
+      <Toaster visibleToasts={1} richColors position="bottom-right"/>
     </main>
   )
 }

@@ -6,9 +6,10 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/componen
 import {useTheme} from 'next-themes'
 import {CommandIcon, CornerDownLeftIcon, Loader2Icon} from 'lucide-react'
 import useSqlEditor from './use-sql-editor'
+import {DataTable} from '../table-explorer/data-table/data-table'
 
 const SqlEditor = () => {
-  const { code, setCode, isDarkMode, handleRunQuery, isPending, results } = useSqlEditor()
+  const { code, setCode, isDarkMode, handleRunQuery, isPending, results, table } = useSqlEditor()
 
   return (
     <div className="flex flex-col h-screen w-full">
@@ -59,6 +60,7 @@ const SqlEditor = () => {
                   )}
                 </div>
               ))}
+              <DataTable table={table} />
             </div>
           </div>
         </ResizablePanel>

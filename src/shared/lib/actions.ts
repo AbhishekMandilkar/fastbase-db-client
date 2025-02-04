@@ -8,7 +8,7 @@ import {
   } from 'electron'
   import { loadConfig, saveConfig } from './config'
   import { Config, Connection, Query } from '../types'
-  import { connectDatabase, disconnectDatabase, getDatabaseSchema, queryDatabase } from './connection'
+  import { connectDatabase, disconnectDatabase, getDatabaseSchemas, getDatabaseTables, queryDatabase } from './connection'
   import { appDB, appSchema } from './app-db'
   import { desc, eq } from 'drizzle-orm'
   import { checkForUpdates, downloadUpdate, getUpdateInfo, quitAndInstall } from './updater'
@@ -133,14 +133,23 @@ import {
     }),
   
     queryDatabase: chain.input<Parameters<typeof queryDatabase>[0]>().action(async ({ input }) => {
-      return queryDatabase(input)
+      try {
+        return queryDatabase(input)
+      } catch (error) {
+        console.error('Error querying database:', error)
+        return []
+      }
     }),
   
-    getDatabaseSchema: chain
-      .input<Parameters<typeof getDatabaseSchema>[0]>()
+    getDatabaseTables: chain
+      .input<Parameters<typeof getDatabaseTables>[0]>()
       .action(async ({ input }) => {
-        return getDatabaseSchema(input)
+        return getDatabaseTables(input)
       }),
+
+    getDatabaseSchemas: chain.input<Parameters<typeof getDatabaseSchemas>[0]>().action(async ({ input }) => {
+      return getDatabaseSchemas(input)
+    }),
   
     getConnections: chain.action(async () => {
       return appDB.query.connection.findMany({

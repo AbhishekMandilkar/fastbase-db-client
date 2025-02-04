@@ -5,6 +5,7 @@ import icon from '../../resources/icon.png?asset'
 import {runMigrations} from '../shared/lib/app-db'
 import {actions} from '../shared/lib/actions'
 
+
 for (const name of Object.keys(actions)) {
   const action = actions[name]
   ipcMain.handle(name, action)
@@ -20,9 +21,11 @@ function createWindow(): void {
     icon,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
+      sandbox: false,
     },
-    titleBarOverlay: true,
+    titleBarStyle: 'default',
+    // expose window controlls in Windows/Linux
+    ...(process.platform !== 'darwin' ? { titleBarOverlay: true } : {})
   })
 
   mainWindow.on('ready-to-show', () => {

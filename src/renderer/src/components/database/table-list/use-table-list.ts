@@ -1,15 +1,18 @@
-import { actionsProxy } from '@/lib/action-proxy'
-import { useQuery } from '@tanstack/react-query'
-import { useCallback, useState, useMemo } from 'react'
-import { useParams } from 'react-router'
+import {actionsProxy} from '@/lib/action-proxy'
+import {useQuery} from '@tanstack/react-query'
+import {useState, useMemo} from 'react'
+import {useParams} from 'react-router'
 import {TableWithColumns} from 'src/shared/types'
-import { useDebounce } from '@/hooks/use-debounce'
+import {useDebounce} from '@/hooks/use-debounce'
+import {useDatabase} from '@/pages/database/slice/database-slice'
 
 export const useTableList = () => {
-  const { connectionId, tableName } = useParams();
+  const {tableName} = useParams();
   const [search, setSearch] = useState('')
   const debouncedSearch = useDebounce(search)
-  
+  const {connectionId} = useParams();
+
+  console.log('connection', connectionId)
   const query = useQuery({
     retry: false,
     refetchOnWindowFocus: false,
@@ -17,15 +20,11 @@ export const useTableList = () => {
     queryKey: ['databaseTables', connectionId],
     queryFn: async () => {
       if (!connectionId) return null
-      return actionsProxy.connectDatabase.invoke({ connectionId }).then((connection) => {
-        if (!connection) {
-          throw new Error('database not found')
-        }
 
-        return actionsProxy.getDatabaseSchema.invoke({ connection })
-      })
+      return actionsProxy.getDatabaseTables.invoke({ connectionId }) || []
     },
-  });
+    throwOnError: true
+  })
 
 
   const filteredTables = useMemo(() => {
@@ -33,7 +32,7 @@ export const useTableList = () => {
     return query.data.tables.filter(table => 
       table.name.toLowerCase().includes(debouncedSearch.toLowerCase())
     )
-  }, [query.data?.tables, debouncedSearch])
+  }, [query.data?.tables, debouncedSearch]) || []
 
   return {
     tables: filteredTables as TableWithColumns[],

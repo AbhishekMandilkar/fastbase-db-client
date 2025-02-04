@@ -45,22 +45,22 @@ function SidebarListing<T>({
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {(items || new Array(skeletonCount)).map((item, index) => (
+            {isLoading ? (
+              <SidebarListingSkeleton />
+            ) : (
+              <SidebarMenu>
+              {(items).map((item, index) => (
                 <SidebarMenuItem key={isLoading ? index : (item as any).name}>
                   <SidebarMenuButton 
                     asChild 
                     isActive={selectedItem === (item as any).name}
                   >
-                    {isLoading ? (
-                      <Skeleton className="w-full" />
-                    ) : (
-                      renderItem(item)
-                    )}
+                    {renderItem(item)}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
+                ))}
+              </SidebarMenu>
+            )}
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
@@ -69,3 +69,16 @@ function SidebarListing<T>({
 }
 
 export default SidebarListing 
+
+
+const SidebarListingSkeleton = () => {
+  return (
+    <div className="flex flex-col gap-2">
+      <Skeleton className="w-full h-10" />
+      <Skeleton className="w-full h-10" />
+      <Skeleton className="w-full h-10" />
+      <Skeleton className="w-full h-10" />
+      <Skeleton className="w-full h-10" />
+    </div>
+  )
+}

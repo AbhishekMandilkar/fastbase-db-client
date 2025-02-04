@@ -25,7 +25,7 @@ export type DatabaseColumn = {
   default: string | null
 }
 
-export type DatabaseSchema = {
+export type Database = {
   tables: {
     name: string
     columns: DatabaseColumn[]
@@ -69,3 +69,15 @@ export type TableWithColumns = {
   name: string;
   columns: Column[];
 }
+
+export type DatabaseSchema = {
+  oid: number
+  nspname: string
+  nspowner: number
+  nspacl: null
+}
+
+export type ColumnTypeNameMap = Map<
+  string,
+  Column
+>

@@ -1,7 +1,7 @@
 import fs from 'fs'
 import { identify } from 'sql-query-identifier'
 import { eq } from 'drizzle-orm'
-import { Connection, DatabaseColumn, DatabaseSchema, QueryDatabaseResult } from '../types'
+import { Connection, DatabaseColumn, DatabaseSchema, QueryDatabaseResult, TableWithColumns } from '../types'
 import { appDB, appSchema } from './app-db'
 import pg from 'pg'
 
@@ -125,12 +125,33 @@ export const queryDatabase = async ({
   return results
 }
 
-export const getDatabaseSchema = async ({
+export const getDatabaseSchemas = async ({
   connection
 }: {
   connection: Connection
-}): Promise<DatabaseSchema> => {
+}): Promise<DatabaseSchema[]> => {
   const db = instances.get(connection.id)
+
+  if (!db) {
+    throw new Error('Database not found')
+  }
+
+  const schemas = await db.execute(`SELECT nspname FROM pg_namespace;`);
+  const result = schemas.rows as DatabaseSchema[];
+
+  return result;
+}
+
+export const getDatabaseTables = async ({
+  connectionId,
+  schema = 'public'
+}: {
+  connectionId: string,
+  schema?: string
+}): Promise<{
+  tables: TableWithColumns[]
+}> => {
+  const db = instances.get(connectionId)
 
   if (!db) {
     throw new Error('Database not found')
@@ -139,7 +160,7 @@ export const getDatabaseSchema = async ({
   const tables = await db
     .execute<{
       table_name: string
-    }>(`SELECT table_name FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema = 'public';`)
+    }>(`SELECT table_name FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema = '${schema}';`)
     .then((res) => res.rows)
 
   const tablesWithColumns = await Promise.all(
