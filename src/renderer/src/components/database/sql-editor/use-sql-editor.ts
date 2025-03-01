@@ -1,18 +1,16 @@
-import { useMemo, useState } from 'react'
-import { useTheme } from 'next-themes'
-import {actionsProxy} from '@/lib/action-proxy'
-import {useActiveConnection} from '@/pages/database/common-hooks'
+import {useMemo, useState} from 'react'
+import {useTheme} from 'next-themes'
 import {QueryDatabaseResult} from 'src/shared/types'
-import {useDatabase} from '@/pages/database/slice/database-slice'
 import {useParams} from 'react-router'
 import {useReactTable, ColumnDef, getCoreRowModel, getPaginationRowModel} from '@tanstack/react-table'
+import useSqlQuery from '../hooks/use-sql-query'
 
 const useSqlEditor = () => {
   const [code, setCode] = useState(`SELECT * FROM users`);
-  const [results, setResults] = useState<QueryDatabaseResult[]>([]);
+  const [results, setResults] = useState<QueryDatabaseResult<any>[]>([]);
   const { theme } = useTheme()
   const isDarkMode = theme === 'dark'
-  const { mutateAsync: queryDatabase, isPending } = actionsProxy.queryDatabase.useMutation();
+  const {handleQuery, isPending} = useSqlQuery();
   const {connectionId} = useParams();
 
   if (!connectionId) {
@@ -38,11 +36,8 @@ const useSqlEditor = () => {
   })
 
 
-  const handleRunQuery = async () => {
-    const resp = await queryDatabase({
-      connectionId: connectionId,
-      query: code
-    })
+  const handleRunQuery = async (query?: string) => {
+    const resp = await handleQuery(query || code)
     console.info(resp)
     setResults(resp);
   }

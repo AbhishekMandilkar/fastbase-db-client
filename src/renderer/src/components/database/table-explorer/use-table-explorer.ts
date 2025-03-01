@@ -63,7 +63,7 @@ const useTableExplorer = () => {
     })
 
     // Use React Query for data fetching
-    const { refetch, isLoading } = useQuery({
+    const { refetch, isLoading, isFetching } = useQuery({
       queryKey: ['table-data', tableName, selectedSchema],
       queryFn: fetchTableData,
       enabled: Boolean(tableName && selectedSchema),
@@ -76,7 +76,7 @@ const useTableExplorer = () => {
     return {
       table,
       data,
-      isLoading,
+      isLoading: isLoading || isFetching,
       refetch,
       columns,
       tableName

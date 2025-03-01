@@ -1,57 +1,56 @@
 import { BrowserWindow, BrowserWindowConstructorOptions, shell } from 'electron'
 import icon from '../../../resources/icon.png?asset'
-import path from 'path'
+import path, {join} from 'path'
 import { disableCors } from './cors'
+import {is} from '@electron-toolkit/utils'
 
 export type WindowId = 'main' | 'updater'
 
 export const windows = new Map<WindowId, BrowserWindow>()
 
-const createWindow = ({
-  id,
-  path: urlPath,
-  windowOptions
-}: {
-  id: WindowId
-  path?: string
-  windowOptions?: BrowserWindowConstructorOptions
-}) => {
+export function createWindow() {
   // Create the browser window.
-  const window = new BrowserWindow({
+  const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
     show: false,
     autoHideMenuBar: false,
-    ...(process.platform === 'linux' ? { icon } : {}),
-    ...windowOptions,
+    icon,
     webPreferences: {
-      preload: path.join(__dirname, '../preload/index.mjs'),
+      preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
-    }
+    },
+    titleBarStyle: 'default',
+    // expose window controlls in Windows/Linux
+    ...(process.platform !== 'darwin' ? { titleBarOverlay: true } : {})
   })
 
-  windows.set(id, window)
+  windows.set('main', mainWindow);
 
-  disableCors(window)
-
-  window.on('ready-to-show', () => {
-    window.show()
+  mainWindow.on('ready-to-show', () => {
+    mainWindow.show()
   })
 
-  window.on('close', () => {
-    windows.delete(id)
-  })
+  mainWindow.webContents.openDevTools()
 
-  window.webContents.setWindowOpenHandler((details) => {
+  mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: 'deny' }
   })
 
-  const url = import.meta.env.DEV ? 'http://localhost:5173' : 'assets://app'
-  window.loadURL(url + (urlPath || ''))
+  // HMR for renderer base on electron-vite cli.
+  // Load the remote URL for development or the local html file for production.
+  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+  } else {
+    const __filename = new URL(import.meta.url).pathname
+    
+    mainWindow.loadFile(join(__filename, '../renderer/index.html'))
+  }
 
-  return window
+  return mainWindow
 }
+
 
 export const createMainWindow = () => {
   const window = windows.get('main')
@@ -61,31 +60,14 @@ export const createMainWindow = () => {
     return window
   }
 
-  return createWindow({
-    id: 'main',
-    windowOptions: {
-      minWidth: 800,
-      minHeight: 600,
-      trafficLightPosition: { x: 12, y: 16 }
-    }
-  })
+  return createWindow()
 }
 
 export function showUpdaterWindow() {
   let window = windows.get('updater')
 
   if (!window) {
-    window = createWindow({
-      id: 'updater',
-      path: '/updater',
-      windowOptions: {
-        width: 700,
-        height: 500,
-        resizable: false
-        // vibrancy: "sidebar",
-        // visualEffectState: "active",
-      }
-    })
+    window = createWindow()
   } else {
     window.show()
   }

@@ -12,7 +12,8 @@ import {
   import { appDB, appSchema } from './app-db'
   import { desc, eq } from 'drizzle-orm'
   import { checkForUpdates, downloadUpdate, getUpdateInfo, quitAndInstall } from './updater'
-  import { WindowId, showUpdaterWindow, windows } from './window'
+import {showUpdaterWindow, WindowId, windows} from './window'
+
   
   type ActionContext = {
     sender: Electron.WebContents
@@ -204,5 +205,7 @@ import {
     copyToClipboard: chain.input<{ text: string }>().action(async ({ input }) => {
       clipboard.writeText(input.text)
     })
+
+    
   }
   

@@ -1,4 +1,4 @@
-Project Name: FastBase
+Project Name: Fastbase
 
 Description:
 A modern, high-performance PostgreSQL client designed to replace Beekeeper Studio by addressing its slow and outdated UI. This product offers a sleek and efficient experience for PostgreSQL database management.

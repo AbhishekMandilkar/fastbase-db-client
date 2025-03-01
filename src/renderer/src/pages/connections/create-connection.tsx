@@ -22,7 +22,8 @@ const CreateConnection = () => {
     passwordInputRef,
     databaseInputRef,
     nicknameInputRef,
-    isConnecting
+    isConnecting,
+    validationErrors,
   } = useCreateConnection()
 
   return (
@@ -36,19 +37,51 @@ const CreateConnection = () => {
           <form className="grid w-full items-center gap-4 grid-cols-2">
             <div className="flex flex-col space-y-1.5 col-span-2">
               <Label htmlFor="nickname">Nickname</Label>
-              <Input id="nickname" ref={nicknameInputRef} placeholder="Enter connection nickname" />
+              <Input 
+                id="nickname" 
+                ref={nicknameInputRef} 
+                placeholder="Enter connection nickname"
+                className={validationErrors.nickname ? 'border-red-500' : ''} 
+              />
+              {validationErrors.nickname && (
+                <span className="text-sm text-red-500">{validationErrors.nickname}</span>
+              )}
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="host">Host</Label>
-              <Input id="host" ref={hostInputRef} placeholder="localhost" />
+              <Input 
+                id="host" 
+                ref={hostInputRef} 
+                placeholder="localhost"
+                className={validationErrors.host ? 'border-red-500' : ''} 
+              />
+              {validationErrors.host && (
+                <span className="text-sm text-red-500">{validationErrors.host}</span>
+              )}
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="port">Port</Label>
-              <Input id="port" ref={portInputRef} placeholder="5432" />
+              <Input 
+                id="port" 
+                ref={portInputRef} 
+                placeholder="5432"
+                className={validationErrors.port ? 'border-red-500' : ''} 
+              />
+              {validationErrors.port && (
+                <span className="text-sm text-red-500">{validationErrors.port}</span>
+              )}
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="user">User</Label>
-              <Input id="user" ref={userInputRef} placeholder="Enter username" />
+              <Input 
+                id="user" 
+                ref={userInputRef} 
+                placeholder="Enter username"
+                className={validationErrors.user ? 'border-red-500' : ''} 
+              />
+              {validationErrors.user && (
+                <span className="text-sm text-red-500">{validationErrors.user}</span>
+              )}
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="password">Password</Label>
@@ -57,11 +90,23 @@ const CreateConnection = () => {
                 type="password"
                 ref={passwordInputRef}
                 placeholder="Enter password"
+                className={validationErrors.password ? 'border-red-500' : ''} 
               />
+              {validationErrors.password && (
+                <span className="text-sm text-red-500">{validationErrors.password}</span>
+              )}
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="database">Database</Label>
-              <Input id="database" ref={databaseInputRef} placeholder="Enter database name" />
+              <Input 
+                id="database" 
+                ref={databaseInputRef} 
+                placeholder="Enter database name"
+                className={validationErrors.database ? 'border-red-500' : ''} 
+              />
+              {validationErrors.database && (
+                <span className="text-sm text-red-500">{validationErrors.database}</span>
+              )}
             </div>
           </form>
         </CardContent>

@@ -4,6 +4,7 @@ import { eq } from 'drizzle-orm'
 import { Connection, DatabaseColumn, DatabaseSchema, QueryDatabaseResult, TableWithColumns } from '../types'
 import { appDB, appSchema } from './app-db'
 import pg from 'pg'
+import {windows} from './window'
 
 type DatabaseInstance = {
   execute<T extends Record<string, unknown> = Record<string, unknown>>(
@@ -23,6 +24,18 @@ export const disconnectDatabase = async (connectionId: string) => {
   if (instance) {
     await instance.close()
     instances.delete(connectionId)
+  }
+}
+
+const handleDisconnection = (connectionId: string, err: Error) => {
+  instances.delete(connectionId)
+  
+  const mainWindow = windows.get('main')
+  if (mainWindow) {
+    mainWindow.webContents.send('database-disconnected', {
+      connectionId,
+      error: err.stack
+    })
   }
 }
 
@@ -50,7 +63,11 @@ export const connectDatabase = async (connectionId: string, disabledSSL?: boolea
       : {
           rejectUnauthorized: false,
           ca: fs.readFileSync('/etc/ssl/cert.pem')
-        }
+        },
+         // Add connection timeout and keepalive settings
+    connectionTimeoutMillis: 10000,
+    keepalive: true,
+    keepaliveInitialDelayMillis: 30000
   })
 
   try {
@@ -67,6 +84,12 @@ export const connectDatabase = async (connectionId: string, disabledSSL?: boolea
 
   client.on('end', () => {
     instances.delete(connection.id)
+  })
+
+  client.on('error', (err) => {
+    console.error('Database connection error:', err)
+    instances.delete(connection.id)
+    handleDisconnection(connection.id, err)
   })
 
   const db = {
@@ -141,6 +164,7 @@ export const getDatabaseSchemas = async ({
 
   return result;
 }
+
 
 export const getDatabaseTables = async ({
   connectionId,

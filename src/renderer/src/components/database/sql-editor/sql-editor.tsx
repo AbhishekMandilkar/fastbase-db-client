@@ -37,7 +37,7 @@ const SqlEditor = () => {
           <div className="flex flex-col h-full">
             <div className="flex border-b p-2 bg-primary-foreground justify-between items-center">
               <small className="text-lg font-medium leading-none">Results</small>
-              <Button onClick={handleRunQuery} disabled={isPending}>
+              <Button onClick={() => handleRunQuery()} disabled={isPending}>
                 {isPending ? 'Running...' : 'Run'}
                 {isPending ? (
                   <Loader2Icon className="w-4 h-4 animate-spin" />

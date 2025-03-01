@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, index } from 'drizzle-orm/sqlite-core'
+import { sqliteTable, text, integer, index,} from 'drizzle-orm/sqlite-core'
 import { customAlphabet } from 'nanoid'
 import {ConnectionConfig, ConnectionType} from '../types'
 
@@ -18,7 +18,11 @@ export const connection = sqliteTable('connection', {
   user: text(),
   config: text({ mode: 'json' }).$type<ConnectionConfig>(),
   password: text(),
-  database: text().notNull()
+  database: text().notNull(),
+  favourite: integer({
+    mode: 'boolean'
+  }),
+  url: text()
 })
 
 export const query = sqliteTable(

@@ -15,6 +15,7 @@ export type Connection = {
   password?: string | null
   host?: string | null
   port?: string | null
+  url?: string
 }
 
 
@@ -40,9 +41,9 @@ export type Query = {
   query: string
 }
 
-export type QueryDatabaseResult = {
+export type QueryDatabaseResult<T> = {
   statement: IdentifyResult
-  rows: Record<string, unknown>[]
+  rows: T[]
   rowsAffected?: number | null
   error?: string
   aborted?: boolean
@@ -81,3 +82,20 @@ export type ColumnTypeNameMap = Map<
   string,
   Column
 >
+
+
+export interface ColumnDef  {
+  column_name: string;
+  data_type: string;
+  column_default: string | null;
+  is_nullable: "YES" | "NO";
+  character_maximum_length: number | null;
+}
+
+export interface ConstraintDef {
+  constraint_name: string;
+  constraint_type: string;
+  column_name: string;
+  foreign_table_name: string;
+  foreign_column_name: string;
+}
