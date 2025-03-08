@@ -38,7 +38,7 @@ const Database = () => {
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>Database Disconnected!</AlertDialogTitle>
-                <AlertDialogDescription className='max-w-[90%] text-wrap'>
+                <AlertDialogDescription className='text-wrap'>
                   {err || `Something went wrong`}
                 </AlertDialogDescription>
               </AlertDialogHeader>

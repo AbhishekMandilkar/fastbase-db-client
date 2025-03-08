@@ -15,10 +15,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge"
 import useSqlQuery from "../hooks/use-sql-query"
 import {getTableContraintsQuery, getTableSchemaQuery} from "@/lib/sql-queries"
-import {useParams} from "react-router"
 import useActiveTableName from "../hooks/use-active-table-name"
 import { ColumnDef, ConstraintDef} from "src/shared/types"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import {useQuery} from "@tanstack/react-query"
 
 interface TableColumns extends ColumnDef {
   constraints: ConstraintDef[];
@@ -51,7 +51,7 @@ const columnHelper = createColumnHelper<TableColumns>()
         <p
           className="italic text-muted-foreground font-mono"
         >
-          {info.getValue() ? "NULL" : "NOT NULL"}
+          {info.getValue() === "YES" ? "NULL" : "NOT NULL"}
         </p>
       ),
     }),
@@ -110,7 +110,7 @@ export default function TableSchema() {
   const [tableSchema, setTableSchema] = React.useState<TableSchema | null>(null)
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [loading, setLoading] = React.useState(true)
-  const {handleQuery, isPending} = useSqlQuery()
+  const {handleQuery} = useSqlQuery()
   const tableName = useActiveTableName();
 
   // Create a function to transform constraints array into a map
@@ -161,9 +161,11 @@ export default function TableSchema() {
     }
   }, [tableName, handleQuery]);
 
-  React.useEffect(() => {
-    fetchTableSchema();
-  }, [fetchTableSchema]);
+
+  const {isPending, isLoading, isFetching} = useQuery({
+    queryKey: ["table-schema", tableName],
+    queryFn: fetchTableSchema,
+  })
 
 
 
@@ -178,17 +180,16 @@ export default function TableSchema() {
     },
   });
 
-  console.log(tableSchema, loading, isPending)
+  console.log('isPending', isPending, 'isLoading', isLoading, 'isFetching', isFetching)
 
   return (
-    <div className="bg-grid-small-black/[0.2]  p-6 flex items-start justify-center">
-      <div className="w-full max-w-6xl bg-sidebar rounded-none border">
-        <div className="p-6">
-          <div className="flex items-center gap-3 mb-6">
+    <div className="bg-grid-small-black/[0.2] p-6 flex items-start justify-center">
+      <div className="w-full max-w-6xl bg-sidebar rounded-none border p-6 flex flex-col gap-6">
+          <div className="flex items-center gap-3">
             <h2 className="text-xl font-semibold ">{tableName}</h2>
           </div>
 
-          <div className="border bg-red">
+          <div className="border">
             <Table>
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
@@ -252,8 +253,22 @@ export default function TableSchema() {
               </TableBody>
             </Table>
           </div>
-        </div>
+        <TableLegends />
       </div>
+    </div>
+  )
+}
+
+
+
+const TableLegends = () => {
+  return (
+    <div className="flex flex-col items-start gap-2 font-mono text-xs text-muted-foreground">
+      <span className="flex gap-2">FK - Foreign Key</span>
+      <span className="flex gap-2">
+        <Key className="h-4 w-4 text-amber-500" /> -
+        Primary Key
+      </span>
     </div>
   )
 }
