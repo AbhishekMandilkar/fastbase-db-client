@@ -1,10 +1,8 @@
 
 import TableList from '@/components/database/table-list/table-list'
 import ErrorBoundary from '@/components/error-boundry'
-import React from 'react'
-import { Outlet, useParams } from 'react-router'
+import {Outlet, useParams} from 'react-router'
 import DatabaseError from '../database-error'
-import {useDatabase} from '../slice/database-slice'
 const TablesView = () => {
   const {tableName} = useParams();
   return (

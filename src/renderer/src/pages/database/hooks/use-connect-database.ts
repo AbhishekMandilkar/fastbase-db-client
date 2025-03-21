@@ -1,8 +1,5 @@
-import { actionsProxy } from '@/lib/action-proxy'
-import { useQuery } from '@tanstack/react-query'
-import React, {useEffect, useState} from 'react'
-import { useNavigate, useParams } from 'react-router'
-import {useDatabaseDispatch} from '../slice/database-slice'
+import {actionsProxy} from '@/lib/action-proxy'
+import {useState} from 'react'
 import {toast} from 'sonner'
 
 const useConnectDatabase = () => {

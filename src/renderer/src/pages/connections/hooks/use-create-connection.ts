@@ -28,6 +28,7 @@ export const useCreateConnection = () => {
   const [urlInput, setUrlInput] = useState('')
   const [importFromUrlDialogOpen, setImportFromUrlDialogOpen] = useState(false)
   const [isConnecting, setIsConnecting] = useState(false)
+  const [isTesting, setIsTesting] = useState(false)
   // Add refs for form inputs
   const hostInputRef = useRef<HTMLInputElement>(null)
   const portInputRef = useRef<HTMLInputElement>(null)
@@ -87,12 +88,12 @@ export const useCreateConnection = () => {
 
   const validateForm = () => {
     const formData = {
-      nickname: nicknameInputRef.current?.value || '',
-      host: hostInputRef.current?.value || '',
-      port: portInputRef.current?.value || '',
-      user: userInputRef.current?.value || '',
-      password: passwordInputRef.current?.value || '',
-      database: databaseInputRef.current?.value || '',
+      nickname: nicknameInputRef.current?.value,
+      host: hostInputRef.current?.value,
+      port: portInputRef.current?.value,
+      user: userInputRef.current?.value,
+      password: passwordInputRef.current?.value,
+      database: databaseInputRef.current?.value,
     }
 
     try {
@@ -149,6 +150,36 @@ export const useCreateConnection = () => {
     setImportFromUrlDialogOpen(value)
   }
 
+  const handleTestConnection = async () => {
+    try {
+      if (!validateForm()) {
+        return
+      }
+
+      setIsTesting(true)
+      const testConnection = {
+        type: 'postgresql',
+        host: hostInputRef.current?.value || '',
+        port: portInputRef.current?.value || '5432',
+        user: userInputRef.current?.value || '',
+        password: passwordInputRef.current?.value || '',
+        database: databaseInputRef.current?.value || '',
+        id: crypto.randomUUID(),
+        createdAt: new Date(),
+      }
+
+      await actionsProxy.connectDatabase.invoke({ connectionId: testConnection.id })
+      await actionsProxy.deleteConnection.invoke({ id: testConnection.id })
+      
+      setIsTesting(false)
+      return true
+    } catch (error) {
+      console.error('Failed to test database connection:', error)
+      setIsTesting(false)
+      return false
+    }
+  }
+
   return {
     importFromUrlDialogOpen,
     handleImportFromUrlDialogOpen,
@@ -166,5 +197,7 @@ export const useCreateConnection = () => {
     isConnecting,
     validationErrors,
     validateForm,
+    handleTestConnection,
+    isTesting,
   }
 }

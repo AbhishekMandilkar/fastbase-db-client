@@ -109,7 +109,7 @@ export function ConnectionList({ ...props }: React.ComponentProps<typeof Sidebar
                             onClick={() => handleSelectDatabase(item)}
                             className="cursor-pointer"
                           >
-                            {item.nickname || item.database}
+                            <p className="truncate text-ellipsis"> {item.host}</p>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}

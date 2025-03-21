@@ -7,14 +7,14 @@ export type ConnectionConfig = {}
 export type Connection = {
   id: string
   createdAt: Date
-  nickname: string | null
+  nickname: string | undefined
   type: ConnectionType
   database: string
-  config?: ConnectionConfig | null
-  user?: string | null
-  password?: string | null
-  host?: string | null
-  port?: string | null
+  config?: ConnectionConfig
+  user: string 
+  password: string 
+  host: string
+  port: string 
   url?: string
 }
 
@@ -41,9 +41,9 @@ export type Query = {
   query: string
 }
 
-export type QueryDatabaseResult<T> = {
+export type QueryDatabaseResult = {
   statement: IdentifyResult
-  rows: T[]
+  rows: any | any[]
   rowsAffected?: number | null
   error?: string
   aborted?: boolean

@@ -64,7 +64,6 @@ export const connectDatabase = async (connectionId: string, disabledSSL?: boolea
           rejectUnauthorized: false,
           ca: fs.readFileSync('/etc/ssl/cert.pem')
         },
-         // Add connection timeout and keepalive settings
     connectionTimeoutMillis: 10000,
     keepalive: true,
     keepaliveInitialDelayMillis: 30000

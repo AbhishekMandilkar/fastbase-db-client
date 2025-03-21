@@ -1,8 +1,8 @@
 
 import 'immer'
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
-import {ColumnTypeNameMap, Connection, DatabaseSchema, TableWithColumns} from 'src/shared/types'
+import {createSlice} from '@reduxjs/toolkit'
+import type {PayloadAction} from '@reduxjs/toolkit'
+import {ColumnTypeNameMap, DatabaseSchema} from 'src/shared/types'
 import {useDispatch, useSelector} from 'react-redux'
 import {RootState} from '@/store/store'
 

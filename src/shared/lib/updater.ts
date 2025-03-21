@@ -1,6 +1,6 @@
-import electronUpdater, { UpdateInfo } from 'electron-updater'
+import electronUpdater, {UpdateInfo} from 'electron-updater'
 // import { showUpdaterWindow, windows } from './window'
-import { MenuItem, dialog } from 'electron'
+import {MenuItem, dialog} from 'electron'
 
 electronUpdater.autoUpdater.fullChangelog = true
 electronUpdater.autoUpdater.autoDownload = false
@@ -41,7 +41,7 @@ export function init() {
     // window?.close()
   })
 
-  electronUpdater.autoUpdater.addListener('download-progress', (info) => {
+  electronUpdater.autoUpdater.addListener('download-progress', () => {
     // const window = windows.get('updater')
     // if (window) {
     //   window.webContents.send('download-progress', info)

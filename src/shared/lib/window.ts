@@ -1,7 +1,6 @@
-import { BrowserWindow, BrowserWindowConstructorOptions, shell } from 'electron'
+import {BrowserWindow, shell} from 'electron'
 import icon from '../../../resources/icon.png?asset'
-import path, {join} from 'path'
-import { disableCors } from './cors'
+import {join} from 'path'
 import {is} from '@electron-toolkit/utils'
 
 export type WindowId = 'main' | 'updater'
