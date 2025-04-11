@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
-    "@electron-toolkit/utils": "^3.0.0",
+    "@electron-toolkit/utils": "^4.0.0",
     "@hookform/resolvers": "^3.10.0",
     "@libsql/client": "^0.14.0",
     "@radix-ui/react-accordion": "^1.2.2",
@@ -86,8 +86,8 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@electron-toolkit/eslint-config-prettier": "^2.0.0",
-    "@electron-toolkit/eslint-config-ts": "^2.0.0",
+    "@electron-toolkit/eslint-config-prettier": "^3.0.0",
+    "@electron-toolkit/eslint-config-ts": "^3.0.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@types/bun": "^1.2.1",
     "@types/node": "^20.17.6",
@@ -96,9 +96,9 @@
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
     "drizzle-kit": "^0.30.4",
-    "electron": "^31.0.2",
-    "electron-builder": "^24.13.3",
-    "electron-vite": "^2.3.0",
+    "electron": "^35.1.5",
+    "electron-builder": "^26.0.12",
+    "electron-vite": "^3.1.0",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.3",
     "postcss": "^8.4.49",
