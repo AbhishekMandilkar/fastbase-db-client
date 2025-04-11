@@ -14,6 +14,7 @@ const useTableExplorer = () => {
     const { selectedSchema} = useDatabase()
     const {connectionId} = useParams();
     const [data, setData] = useState<TableData[]>([])
+    const [columnSizing, setColumnSizing] = useState({})
 
     if (!connectionId) {
         throw new Error('No connection found')
@@ -46,7 +47,10 @@ const useTableExplorer = () => {
         id: key,
         accessorKey: key,
         header: key,
-        cell: (info) => info.getValue()
+        cell: (info) => info.getValue(),
+        size: 150, // Default column size
+        minSize: 10, // Minimum column size
+        maxSize: 1000, // Maximum column size
       }))
     }, [data])
 
@@ -56,17 +60,28 @@ const useTableExplorer = () => {
       columns,
       getCoreRowModel: getCoreRowModel(),
       getPaginationRowModel: getPaginationRowModel(),
-      initialState: {
+      enableColumnResizing: true,
+      columnResizeMode: 'onChange',
+      onColumnSizingChange: setColumnSizing,
+      state: {
+        columnSizing,
         pagination: {
           pageSize: 20,
           pageIndex: 0
         }
-      }
+      },
+      defaultColumn: {
+        minSize: 60,
+        maxSize: 800,
+      },
+      debugTable: true,
+      debugHeaders: true,
+      debugColumns: true,
     })
 
     // Use React Query for data fetching
     const { refetch, isLoading, isFetching } = useQuery({
-      queryKey: ['table-data', tableName, selectedSchema],
+      queryKey: ['table-data', tableName],
       queryFn: fetchTableData,
       enabled: Boolean(tableName && selectedSchema),
       throwOnError(error, query) {
@@ -77,11 +92,10 @@ const useTableExplorer = () => {
 
     return {
       table,
+      tableName,
       data,
       isLoading: isLoading || isFetching,
-      refetch,
-      columns,
-      tableName
+      refetch
     }
 }
 
