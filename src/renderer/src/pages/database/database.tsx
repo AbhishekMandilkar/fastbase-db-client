@@ -20,19 +20,19 @@ import {
 
 const Database = () => {
 
-  const {err} = useDBConnection()
+  const {err, isPending} = useDBConnection()
   const nav = useNavigate();
 
     return (
-      <div className="flex h-screen w-full">
-        <>
-          <AppSidebar />
+      <div className="flex w-full">
+        <div className='flex w-full'>
+          <AppSidebar className='h-full' />
           <ErrorBoundary
             fallback={(error, errorInfo) => <DatabaseError error={error} errorInfo={errorInfo} />}
           >
-            <Outlet />
+            {isPending ? <div>Loading...</div> : <Outlet />}
           </ErrorBoundary>
-        </>
+        </div>
         {err && (
           <AlertDialog open>
             <AlertDialogContent>

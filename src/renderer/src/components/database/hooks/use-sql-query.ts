@@ -1,9 +1,12 @@
 import { actionsProxy } from '@/lib/action-proxy'
 import React from 'react'
+import { useMutation } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 const useSqlQuery = () => {
-  const { mutateAsync: queryDatabase, isPending } = actionsProxy.queryDatabase.useMutation()
+  const { mutateAsync: queryDatabase, isPending } = useMutation({
+    mutationFn: (input: { connectionId: string; query: string }) => actionsProxy.queryDatabase.invoke(input)
+  })
   const { connectionId } = useParams()
 
   if (!connectionId) {

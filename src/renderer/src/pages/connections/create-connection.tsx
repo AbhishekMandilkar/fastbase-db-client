@@ -1,12 +1,11 @@
-import React, { useRef, useState } from 'react'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../../components/ui/card'
-import { Label } from '../../components/ui/label'
-import { Input } from '../../components/ui/input'
-import { Button } from '../../components/ui/button'
+import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from '../../components/ui/card'
+import {Label} from '../../components/ui/label'
+import {Input} from '../../components/ui/input'
+import {Button} from '../../components/ui/button'
 
-import { Loader2Icon, Plug } from 'lucide-react'
+import {Loader2Icon, Plug} from 'lucide-react'
 import ImportUrlDialog from './import-url-dialog'
-import { useCreateConnection } from './hooks/use-create-connection'
+import {useCreateConnection} from './hooks/use-create-connection'
 
 const CreateConnection = () => {
   const {

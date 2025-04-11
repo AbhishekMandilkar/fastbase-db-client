@@ -10,21 +10,19 @@ import { Provider } from 'react-redux'
 import TablesView from './pages/database/tables-view/tables-view'
 import TableExplorer from './components/database/table-explorer/table-explorer'
 import SqlQueriesView from './pages/database/sql-queries-view/sql-queries-view'
-import ErrorBoundary from './components/error-boundry'
-import DatabaseError from './pages/database/database-error'
-import {Toaster} from 'sonner'
+import { Toaster } from 'sonner'
 
 function App(): JSX.Element {
   return (
-    <main>
+    <main className="max-h-screen flex flex-col overflow-hidden">
       <Provider store={store}>
         <BrowserRouter>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <QueryClientProvider client={queryClient}>
-              <SidebarProvider>
                 <Routes>
-                  <Route path="/" element={<Connections />} />
-                  <Route path="/connection/:connectionId" element={<Database />}>
+                  <Route path="/" element={ <SidebarProvider><Connections /> </SidebarProvider>} />
+             
+                  <Route path="/connection/:connectionId" element={ <SidebarProvider><Database /> </SidebarProvider>}>
                     <Route index element={<Navigate to="tables" replace />} />
                     <Route path="tables" element={<TablesView />}>
                       <Route path=":tableName" element={<TableExplorer />} />
@@ -34,12 +32,11 @@ function App(): JSX.Element {
                     </Route>
                   </Route>
                 </Routes>
-              </SidebarProvider>
             </QueryClientProvider>
           </ThemeProvider>
         </BrowserRouter>
       </Provider>
-      <Toaster visibleToasts={1} richColors position="bottom-right"/>
+      <Toaster visibleToasts={1} richColors position="bottom-right" />
     </main>
   )
 }

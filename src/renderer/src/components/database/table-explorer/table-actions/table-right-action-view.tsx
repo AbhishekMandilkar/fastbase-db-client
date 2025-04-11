@@ -1,6 +1,3 @@
-import {Button} from '@/components/ui/button'
-import {PlusIcon} from 'lucide-react'
-import React, {useEffect} from 'react'
 import useSqlQuery from '../../hooks/use-sql-query';
 import {useParams} from 'react-router';
 import {useDatabase} from '@/pages/database/slice/database-slice';

@@ -1,14 +1,11 @@
 import React from 'react'
-import {useDatabase} from '@/pages/database/slice/database-slice'
+import { useDatabase } from '@/pages/database/slice/database-slice'
+import { format, formatISODuration, isDate, parseISO } from 'date-fns'
 
-const DataTableCell = (props: {
-  value: string | number | boolean
-  columnName: string
-}) => {
-  const {value, columnName} = props
-  const {selectedTableConfig} = useDatabase()
+const DataTableCell = (props: { value: string | number | boolean | Date | null; columnName: string }) => {
+  const { value, columnName } = props
+  const { selectedTableConfig } = useDatabase()
   const column = selectedTableConfig.get(columnName)
-  
 
   const renderValue = () => {
     if (
@@ -28,12 +25,15 @@ const DataTableCell = (props: {
       return JSON.stringify(value)
     }
 
+    // check if date object using date-fns
+    if (value instanceof Date) {
+      return value.toLocaleString()
+    }
+
     return value
   }
 
-  return (
-    <div className="line-clamp-1">{renderValue()}</div>
-  )
+  return <div className="line-clamp-1">{renderValue()}</div>
 }
 
 export default DataTableCell

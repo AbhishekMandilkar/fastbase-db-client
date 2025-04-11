@@ -1,12 +1,12 @@
-import { useMutation } from '@tanstack/react-query'
-import { useRef, useState } from 'react'
-import { appDB, appSchema } from '../../../../../shared/lib/app-db'
-import { Connection, ConnectionConfig } from '../../../../../shared/types'
+import {useRef, useState} from 'react'
 import Url from 'url-parse'
-import { actionsProxy } from '@/lib/action-proxy'
-import { useNavigate } from "react-router";
-import { z } from 'zod'
-import {useDatabaseDispatch} from '@/pages/database/slice/database-slice'
+import {actionsProxy} from '@/lib/action-proxy'
+import {useNavigate} from "react-router"
+import {z} from 'zod'
+import {ConnectionInsert} from 'src/shared/schema/app-schema'
+import {useMutation} from '@tanstack/react-query'
+import {queryClient} from '@/lib/query-client'
+import {GET_CONNECTIONS_QUERY_KEY} from '../connection-list'
 
 // Add validation schema
 const connectionSchema = z.object({
@@ -39,16 +39,19 @@ export const useCreateConnection = () => {
   const nicknameInputRef = useRef<HTMLInputElement>(null)
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({})
 
-  const createConnection = actionsProxy.createConnection.useMutation({
+  const createConnection = useMutation({
+    mutationFn: (connection: ConnectionInsert) => actionsProxy.createConnection.invoke(connection),
     async onSuccess(_, variables) {
       try {
-        await actionsProxy.createConnection.invoke(variables)
         navigation(`/connection/${variables.id}`)
+        console.log('variables', variables, _)
       } catch (error) {
         console.error('Failed to create connection:', error)
       }
     }
   })
+
+  console.log('urlInput', urlInput)
 
   const parseAndFillForm = (connectionUrl: string) => {
     try {
@@ -121,7 +124,8 @@ export const useCreateConnection = () => {
       }
 
       setIsConnecting(true)
-      await createConnection.mutateAsync({
+
+      const connection: ConnectionInsert = {
         nickname: nicknameInputRef.current?.value || '',
         type: 'postgresql',
         host: hostInputRef.current?.value || '',
@@ -131,8 +135,13 @@ export const useCreateConnection = () => {
         database: databaseInputRef.current?.value || '',
         id: crypto.randomUUID(),
         createdAt: new Date(),
-        url: urlInput
-      })
+        url: urlInput,
+        favourite: false,
+        config: null,
+      }
+
+      await createConnection.mutateAsync(connection);
+      queryClient.invalidateQueries({queryKey: [GET_CONNECTIONS_QUERY_KEY]})
       setIsConnecting(false)
     } catch (error) {
       console.error('Failed to connect to database:', error)
@@ -143,10 +152,10 @@ export const useCreateConnection = () => {
   const handleImport = () => {
     parseAndFillForm(urlInput)
     setImportFromUrlDialogOpen(false)
-    setUrlInput('')
   }
 
   const handleImportFromUrlDialogOpen = (value: boolean) => {
+    setUrlInput('')
     setImportFromUrlDialogOpen(value)
   }
 
@@ -169,7 +178,7 @@ export const useCreateConnection = () => {
       }
 
       await actionsProxy.connectDatabase.invoke({ connectionId: testConnection.id })
-      await actionsProxy.deleteConnection.invoke({ id: testConnection.id })
+      await actionsProxy.deleteConnection.invoke(testConnection.id)
       
       setIsTesting(false)
       return true

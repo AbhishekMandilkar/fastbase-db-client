@@ -12,7 +12,7 @@ const Brand = (props: {
       </div>
       {showText && (
         <div className="flex flex-col gap-0.5 leading-none">
-          <span className="font-semibold">DB Client</span>
+          <span className="font-semibold">Fastbase</span>
         </div>
       )}
     </>

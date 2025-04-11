@@ -86,7 +86,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     className={`px-2.5 md:px-2`}
                   >
                     <Link to={item.url}>
-                      <item.icon />
+                      <item.icon className='' />
                       <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>

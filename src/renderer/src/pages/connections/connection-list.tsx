@@ -1,5 +1,4 @@
-import * as React from "react"
-import { DatabaseZapIcon, GalleryVerticalEnd } from "lucide-react"
+import * as React from 'react'
 
 import {
   Sidebar,
@@ -13,46 +12,49 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubButton,
-  SidebarMenuSubItem,
-} from "@/components/ui/sidebar"
-import {Separator} from "../../components/ui/separator"
-import {ThemeToggle} from "../../components/theme-switcher"
-import {actionsProxy} from "@/lib/action-proxy"
-import Brand from "@/components/brand"
-import {Connection} from "src/shared/types"
-import {useDatabaseDispatch} from "../database/slice/database-slice"
-import {useNavigate} from "react-router"
-import useConnectDatabase from "../database/hooks/use-connect-database"
-import {toast} from "sonner"
+  SidebarMenuSubItem
+} from '@/components/ui/sidebar'
+import { Separator } from '../../components/ui/separator'
+import { ThemeToggle } from '../../components/theme-switcher'
+import { actionsProxy } from '@/lib/action-proxy'
+import Brand from '@/components/brand'
+import { useNavigate } from 'react-router'
+import useConnectDatabase from '../database/hooks/use-connect-database'
+import { toast } from 'sonner'
+import { Connection } from 'src/shared/schema/app-schema'
+import { useQuery } from '@tanstack/react-query'
 
+export const GET_CONNECTIONS_QUERY_KEY = 'getConnections'
 
 enum ListType {
   Recent = 'Recent',
   Favourite = 'Favourite'
 }
 
-
 const data = {
   navMain: [
     {
       title: ListType.Recent,
-      url: "#",
+      url: '#'
     },
     {
       title: ListType.Favourite,
-      url: "#",
+      url: '#'
     }
-  ],
+  ]
 }
 
 export function ConnectionList({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { data: allConnections, isLoading } = actionsProxy.getConnections.useQuery()
+  const { data: allConnections } = useQuery({
+    queryKey: [GET_CONNECTIONS_QUERY_KEY],
+    queryFn: () => actionsProxy.getConnections.invoke()
+  })
   const favorites = React.useMemo(
     () => allConnections?.filter((connection) => connection.favourite),
     [allConnections]
   )
-  const navigate = useNavigate();
-  const {handleConnect, isConnecting} = useConnectDatabase();
+  const navigate = useNavigate()
+  const { handleConnect } = useConnectDatabase()
 
   const handleSelectDatabase = async (connection: Connection) => {
     toast.promise(
@@ -74,11 +76,11 @@ export function ConnectionList({ ...props }: React.ComponentProps<typeof Sidebar
     if (type === ListType.Recent) {
       return allConnections
     }
-    return favorites;
+    return favorites
   }
 
   return (
-    <Sidebar {...props} >
+    <Sidebar {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -95,7 +97,7 @@ export function ConnectionList({ ...props }: React.ComponentProps<typeof Sidebar
         <SidebarGroup>
           <SidebarMenu className="gap-2">
             {data.navMain.map((item) => {
-              const connectionList = getListByCategory(item.title);
+              const connectionList = getListByCategory(item.title)
               return (
                 <SidebarMenuItem key={item.title}>
                   <SidebarGroupLabel>

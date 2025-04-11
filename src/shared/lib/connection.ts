@@ -1,10 +1,11 @@
 import fs from 'fs'
 import { identify } from 'sql-query-identifier'
 import { eq } from 'drizzle-orm'
-import { Connection, DatabaseColumn, DatabaseSchema, QueryDatabaseResult, TableWithColumns } from '../types'
+import { DatabaseColumn, DatabaseSchema, QueryDatabaseResult, TableWithColumns } from '../types'
 import { appDB, appSchema } from './app-db'
 import pg from 'pg'
 import {windows} from './window'
+import {Connection} from '../schema/app-schema'
 
 type DatabaseInstance = {
   execute<T extends Record<string, unknown> = Record<string, unknown>>(

@@ -1,11 +1,7 @@
-"use client"
 
-import type React from "react"
-import type { Table as TableType } from "@tanstack/react-table"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { cn } from "@/lib/utils"
+import type {Table as TableType} from "@tanstack/react-table"
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table"
 import DataTableCell from "./data-table-cell"
-import {ScrollArea} from "@/components/ui/scroll-area"
 
 interface DataTableProps<TData> {
   table: TableType<TData>
@@ -15,14 +11,14 @@ interface DataTableProps<TData> {
 
 export function DataTable<TData>({ table, className, isLoading }: DataTableProps<TData>) {
   return (
-      <Table className="max-h-full">
+      <Table className="max-w-[calc(100vw-50rem)] overflow-scroll">
         <TableHeader className="bg-muted/50">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <TableHead
                   key={header.id}
-                  className="text-left text-xs font-medium text-muted-foreground first:pl-6 last:pr-6 border-b border-r font-mono"
+                  className="text-left text-xs font-medium text-muted-foreground first:pl-2 last:pr-2 border-b border-r font-mono"
                 >
                   {header.isPlaceholder ? null : header.column.columnDef.header?.toString()}
                 </TableHead>
@@ -30,7 +26,7 @@ export function DataTable<TData>({ table, className, isLoading }: DataTableProps
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody className='max-h-full border-b'>
+        <TableBody className='border-b'>
           {isLoading ? (
             // Loading skeleton rows
             Array.from({ length: 5 }).map((_, index) => (
@@ -38,7 +34,7 @@ export function DataTable<TData>({ table, className, isLoading }: DataTableProps
                 {table.getHeaderGroups()[0]?.headers.map((header, cellIndex) => (
                   <TableCell
                     key={`loading-cell-${cellIndex}`}
-                    className="text-sm first:pl-6 last:pr-6 border-r max-w-[200px]"
+                    className="text-sm first:pl-2 last:pr-2 border-r max-w-[200px]"
                   >
                     <div className="h-4 bg-muted animate-pulse rounded" />
                   </TableCell>
@@ -51,7 +47,7 @@ export function DataTable<TData>({ table, className, isLoading }: DataTableProps
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
                     key={cell.id}
-                    className="text-sm first:pl-6 last:pr-6 border-r max-w-[200px]"
+                    className="text-sm first:pl-2 last:pr-2 border-r max-w-[200px]"
                   >
                     <DataTableCell value={cell.getValue() as string} columnName={cell.column.id} />
                   </TableCell>

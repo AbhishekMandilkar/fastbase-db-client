@@ -1,6 +1,6 @@
 import {actionsProxy} from '@/lib/action-proxy';
 import {useDatabase} from '@/pages/database/slice/database-slice';
-import {useQuery} from '@tanstack/react-query';
+import {useMutation, useQuery} from '@tanstack/react-query';
 import { useReactTable, getCoreRowModel, type ColumnDef, flexRender, getPaginationRowModel } from "@tanstack/react-table"
 import {useMemo, useState} from 'react'
 import {useParams} from 'react-router'
@@ -19,7 +19,9 @@ const useTableExplorer = () => {
         throw new Error('No connection found')
     }
 
-    const { mutateAsync: queryDatabase } = actionsProxy.queryDatabase.useMutation()
+    const { mutateAsync: queryDatabase } = useMutation({
+      mutationFn: (input: { connectionId: string; query: string }) => actionsProxy.queryDatabase.invoke(input)
+    })
 
     const fetchTableData = async () => {
       try {

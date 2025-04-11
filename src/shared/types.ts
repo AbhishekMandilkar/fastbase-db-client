@@ -4,20 +4,6 @@ export type ConnectionType = 'postgresql'
 
 export type ConnectionConfig = {}
 
-export type Connection = {
-  id: string
-  createdAt: Date
-  nickname: string | undefined
-  type: ConnectionType
-  database: string
-  config?: ConnectionConfig
-  user: string 
-  password: string 
-  host: string
-  port: string 
-  url?: string
-}
-
 
 export type DatabaseColumn = {
   name: string

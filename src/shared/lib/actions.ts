@@ -7,12 +7,13 @@ import {
     dialog
   } from 'electron'
   import { loadConfig, saveConfig } from './config'
-  import { Config, Connection, Query } from '../types'
+  import { Config, Query } from '../types'
   import { connectDatabase, disconnectDatabase, getDatabaseSchemas, getDatabaseTables, queryDatabase } from './connection'
   import { appDB, appSchema } from './app-db'
   import { desc, eq } from 'drizzle-orm'
   import { checkForUpdates, downloadUpdate, getUpdateInfo, quitAndInstall } from './updater'
 import {showUpdaterWindow, WindowId, windows} from './window'
+import {Connection, ConnectionInsert} from '../schema/app-schema'
 
   
   type ActionContext = {
@@ -171,14 +172,13 @@ import {showUpdaterWindow, WindowId, windows} from './window'
         return input
       }),
   
-    deleteConnection: chain.input<{ id: string }>().action(async ({ input }) => {
-      await disconnectDatabase(input.id)
+    deleteConnection: chain.input<Connection['id']>().action(async ({ input }) => {
+      await disconnectDatabase(input)
   
-      await appDB.delete(appSchema.connection).where(eq(appSchema.connection.id, input.id))
+      await appDB.delete(appSchema.connection).where(eq(appSchema.connection.id, input))
     }),
   
-    createConnection: chain.input<Connection>().action(async ({ input }) => {
-      console.log('createConnection', input)
+    createConnection: chain.input<ConnectionInsert>().action(async ({ input }) => {
       await appDB.insert(appSchema.connection).values(input)
       return input
     }),

@@ -25,6 +25,9 @@ export const connection = sqliteTable('connection', {
   url: text()
 })
 
+export type Connection = typeof connection.$inferSelect
+export type ConnectionInsert = typeof connection.$inferInsert
+
 export const query = sqliteTable(
   'query',
   {
@@ -40,3 +43,6 @@ export const query = sqliteTable(
     }
   }
 )
+
+export type Query = typeof query.$inferSelect
+export type QueryInsert = typeof query.$inferInsert
