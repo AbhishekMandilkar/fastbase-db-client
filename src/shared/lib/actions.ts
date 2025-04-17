@@ -11,7 +11,7 @@ import {
   import { connectDatabase, disconnectDatabase, getDatabaseSchemas, getDatabaseTables, queryDatabase } from './connection'
   import { appDB, appSchema } from './app-db'
   import { desc, eq } from 'drizzle-orm'
-  import { checkForUpdates, downloadUpdate, getUpdateInfo, quitAndInstall } from './updater'
+  import { checkForUpdates, downloadUpdate, getCurrentVersion, getUpdateInfo, quitAndInstall } from './updater'
 import {showUpdaterWindow, WindowId, windows} from './window'
 import {Connection, ConnectionInsert} from '../schema/app-schema'
 
@@ -48,6 +48,10 @@ import {Connection, ConnectionInsert} from '../schema/app-schema'
   export const actions = {
     getUpdateInfo: chain.action(async () => {
       return getUpdateInfo()
+    }),
+
+    getCurrentVersion: chain.action(async () => {
+      return getCurrentVersion()
     }),
   
     checkForUpdates: chain.action(async () => {

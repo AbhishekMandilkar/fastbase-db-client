@@ -53,6 +53,10 @@ export function getUpdateInfo() {
   return updateInfo
 }
 
+export function getCurrentVersion() {
+  return electronUpdater.autoUpdater.currentVersion
+}
+
 export async function checkForUpdatesMenuItem(_menuItem: MenuItem) {
   menuItem = _menuItem
   menuItem.enabled = false
