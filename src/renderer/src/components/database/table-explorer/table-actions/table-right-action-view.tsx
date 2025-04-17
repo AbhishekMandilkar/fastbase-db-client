@@ -3,7 +3,7 @@ import {useParams} from 'react-router';
 import {useDatabase} from '@/pages/database/slice/database-slice';
 import {useQuery} from '@tanstack/react-query';
 
-const TableActionView = () => {
+const TableActionView = (props: {actionsItems: React.ReactNode}) => {
   const {handleQuery, isPending} = useSqlQuery();
   const {tableName} = useParams();
   const {selectedSchema} = useDatabase();
@@ -17,9 +17,10 @@ const TableActionView = () => {
 
   return (
     <div className="flex items-center space-x-2">
+      {props.actionsItems}
       {totalRows && (
         <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-xs">
-          Total Rows: {totalRowsCount}
+          # Rows: {totalRowsCount}
         </code>
       )}
     </div>

@@ -133,6 +133,10 @@ import {Connection, ConnectionInsert} from '../schema/app-schema'
     connectDatabase: chain.input<{ connectionId: string }>().action(async ({ input }) => {
       return connectDatabase(input.connectionId)
     }),
+
+    disconnectDatabase: chain.input<{ connectionId: string }>().action(async ({ input }) => {
+      return disconnectDatabase(input.connectionId)
+    }),
   
     queryDatabase: chain.input<Parameters<typeof queryDatabase>[0]>().action(async ({ input }) => {
       try {

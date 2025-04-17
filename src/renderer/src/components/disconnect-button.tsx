@@ -1,9 +1,7 @@
-import React from 'react'
-import { Button } from './ui/button'
-import { PowerIcon } from 'lucide-react'
-import { useNavigate, useParams } from 'react-router'
+import {Button} from './ui/button'
+import {PowerIcon} from 'lucide-react'
+import {useNavigate, useParams} from 'react-router'
 import {actionsProxy} from '@/lib/action-proxy'
-import {useDatabase} from '@/pages/database/slice/database-slice'
 import {useMutation} from '@tanstack/react-query'
 import {Connection} from 'src/shared/schema/app-schema'
 
@@ -15,12 +13,12 @@ const DisconnectButton = () => {
     return null
   }
 
-  const {mutateAsync: deleteConnection} = useMutation({
-    mutationFn: (connectionId: Connection['id']) => actionsProxy.deleteConnection.invoke(connectionId)
+  const {mutateAsync: disconnectDatabase} = useMutation({
+    mutationFn: (connectionId: Connection['id']) => actionsProxy.disconnectDatabase.invoke({connectionId})
   });
 
   const handleDisconnect = async () => {
-    await deleteConnection(connectionId)
+    await disconnectDatabase(connectionId)
     navigate('/', {
       replace: true
     })

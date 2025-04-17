@@ -2,9 +2,12 @@ import AppHeader from '@/components/app-header'
 import useTableExplorer from './use-table-explorer'
 import {DataTable} from './data-table/data-table'
 import {Alert, AlertDescription, AlertTitle} from '@/components/ui/alert'
-import {InfoIcon, Rows3Icon, Table} from 'lucide-react'
+import {ChevronRight, DatabaseIcon, InfoIcon, LayersIcon, Rows3Icon, Table, TableIcon} from 'lucide-react'
 import TableActionView from './table-actions/table-right-action-view'
 import {Skeleton} from '@/components/ui/skeleton'
+import {useState} from 'react'
+import {Button} from '@/components/ui/button'
+import TableSchema from './table-schema'
 
 enum tabs {
   rows = 'rows',
@@ -19,15 +22,40 @@ const tableExplorerTabs = [
 const TableExplorer = () => {
   const { table, tableName, data, isLoading } = useTableExplorer()
   const isEmpty = data.length === 0
+  const [selectedTab, setSelectedTab] = useState(tabs.rows)
+
+  const SwitchIcon = selectedTab === tabs.rows ? LayersIcon : DatabaseIcon;
+
+  const ViewMap = {
+    [tabs.rows]: <DataTable table={table} isLoading={isLoading} />,
+    [tabs.structure]: <TableSchema />
+  }
 
   return (
-    <div className='flex flex-col flex-1 self-stretch !w-[calc(100vw-18rem)] overflow-hidden'>
+    <div className="flex flex-col flex-1 self-stretch !w-[calc(100vw-18rem)] overflow-hidden">
       <AppHeader
         title={
-         tableName
+          <div className="flex items-center space-x-2">
+            <ChevronRight className="h-4 w-4" />
+            <span className="font-mono">{tableName}</span>
+          </div>
         }
         titleClassName="font-mono"
-        right={<TableActionView />}
+        right={
+          <TableActionView
+            actionsItems={
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() =>
+                  setSelectedTab(selectedTab === tabs.rows ? tabs.structure : tabs.rows)
+                }
+              >
+                <SwitchIcon className="h-4 w-4" />
+              </Button>
+            }
+          />
+        }
       />
       {(() => {
         if (isLoading) {
@@ -60,7 +88,7 @@ const TableExplorer = () => {
             </div>
           )
         }
-        return <DataTable table={table} isLoading={isLoading} />
+        return ViewMap[selectedTab];
       })()}
     </div>
   )
