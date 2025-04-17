@@ -38,9 +38,6 @@ const Database = () => {
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>Database Disconnected!</AlertDialogTitle>
-                <AlertDialogDescription className='text-wrap'>
-                  {err || `Something went wrong`}
-                </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogAction onClick={() => nav('/')}>Ok</AlertDialogAction>

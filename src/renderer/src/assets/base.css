@@ -99,3 +99,6 @@
 .draglayer {
   app-region: drag;
 }
+div {
+  @apply scrollbar scrollbar-thumb-muted-foreground scrollbar-track-muted
+}

@@ -8,6 +8,7 @@ import {Skeleton} from '@/components/ui/skeleton'
 import {useState} from 'react'
 import {Button} from '@/components/ui/button'
 import TableSchema from './table-schema'
+import DataTableV2 from './data-table/data-table-v2'
 
 enum tabs {
   rows = 'rows',
@@ -27,7 +28,7 @@ const TableExplorer = () => {
   const SwitchIcon = selectedTab === tabs.rows ? LayersIcon : DatabaseIcon;
 
   const ViewMap = {
-    [tabs.rows]: <DataTable table={table} isLoading={isLoading} />,
+    [tabs.rows]: <DataTableV2 table={table} />,
     [tabs.structure]: <TableSchema />
   }
 

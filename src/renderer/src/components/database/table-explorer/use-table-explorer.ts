@@ -68,6 +68,8 @@ const useTableExplorer = () => {
       debugTable: true,
       debugHeaders: true,
       debugColumns: true,
+      columnResizeMode: 'onChange',
+      enableColumnResizing: true,
     })
 
     // Use React Query for data fetching

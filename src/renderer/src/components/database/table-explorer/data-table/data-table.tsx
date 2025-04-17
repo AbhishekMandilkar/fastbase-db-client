@@ -1,6 +1,6 @@
 import type {Table as TableType} from "@tanstack/react-table"
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table"
-import DataTableCell from "./data-table-cell"
+import DataTableCell from "./table-cell/data-table-cell"
 import { cn } from "@/lib/utils"
 import React from "react"
 
