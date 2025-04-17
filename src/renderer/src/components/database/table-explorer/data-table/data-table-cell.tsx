@@ -1,6 +1,5 @@
 import React from 'react'
 import { useDatabase } from '@/pages/database/slice/database-slice'
-import { format, formatISODuration, isDate, parseISO } from 'date-fns'
 
 const DataTableCell = (props: { value: string | number | boolean | Date | null; columnName: string }) => {
   const { value, columnName } = props
@@ -30,10 +29,10 @@ const DataTableCell = (props: { value: string | number | boolean | Date | null; 
       return value.toLocaleString()
     }
 
-    return value
+    return (value)
   }
 
-  return <div className="line-clamp-1">{renderValue()}</div>
+  return <div className="line-clamp-1 overflow-hidden ">{renderValue()}</div>
 }
 
 export default DataTableCell

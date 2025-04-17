@@ -2,7 +2,7 @@ import AppHeader from '@/components/app-header'
 import useTableExplorer from './use-table-explorer'
 import {DataTable} from './data-table/data-table'
 import {Alert, AlertDescription, AlertTitle} from '@/components/ui/alert'
-import {ChevronRight, DatabaseIcon, InfoIcon, LayersIcon, Rows3Icon, Table, TableIcon} from 'lucide-react'
+import {ChevronRight, DatabaseIcon, InfoIcon, LayersIcon, Loader2, Rows3Icon, Table, TableIcon} from 'lucide-react'
 import TableActionView from './table-actions/table-right-action-view'
 import {Skeleton} from '@/components/ui/skeleton'
 import {useState} from 'react'
@@ -60,19 +60,8 @@ const TableExplorer = () => {
       {(() => {
         if (isLoading) {
           return (
-            <div className="space-y-2 p-2">
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-full" />
+            <div className="flex items-center justify-center h-full">
+             <Loader2 className="size-10 animate-spin" />
             </div>
           )
         }

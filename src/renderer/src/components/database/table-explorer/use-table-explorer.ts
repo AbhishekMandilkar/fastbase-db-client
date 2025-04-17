@@ -14,7 +14,6 @@ const useTableExplorer = () => {
     const { selectedSchema} = useDatabase()
     const {connectionId} = useParams();
     const [data, setData] = useState<TableData[]>([])
-    const [columnSizing, setColumnSizing] = useState({})
 
     if (!connectionId) {
         throw new Error('No connection found')
@@ -49,7 +48,7 @@ const useTableExplorer = () => {
         header: key,
         cell: (info) => info.getValue(),
         size: 150, // Default column size
-        minSize: 10, // Minimum column size
+        minSize: 100, // Minimum column size
         maxSize: 1000, // Maximum column size
       }))
     }, [data])
@@ -60,19 +59,11 @@ const useTableExplorer = () => {
       columns,
       getCoreRowModel: getCoreRowModel(),
       getPaginationRowModel: getPaginationRowModel(),
-      enableColumnResizing: true,
-      columnResizeMode: 'onChange',
-      onColumnSizingChange: setColumnSizing,
       state: {
-        columnSizing,
         pagination: {
           pageSize: 20,
           pageIndex: 0
         }
-      },
-      defaultColumn: {
-        minSize: 60,
-        maxSize: 800,
       },
       debugTable: true,
       debugHeaders: true,
