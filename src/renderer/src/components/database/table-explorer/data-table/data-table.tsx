@@ -10,7 +10,7 @@ interface DataTableProps<TData> {
   isLoading?: boolean
 }
 
-export function DataTable<TData>({ table, className, isLoading }: DataTableProps<TData>) {
+export function DataTable<TData>({ table, isLoading }: DataTableProps<TData>) {
 
   const columnSizeVars = React.useMemo(() => {
     const headers = table.getFlatHeaders()

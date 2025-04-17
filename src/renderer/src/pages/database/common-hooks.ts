@@ -3,13 +3,13 @@ import {useParams} from 'react-router'
 
 
 export const useSavedQueries = (connectionId: string) => {
-  return actionsProxy.getQueries.useQuery({
+  return actionsProxy.getQueries.invoke({
     connectionId
   })
 }
 
 export const useConnections = () => {
-  return actionsProxy.getConnections.useQuery()
+  return actionsProxy.getConnections.invoke()
 }
 
 export const useActiveConnection = () => {
@@ -19,6 +19,6 @@ export const useActiveConnection = () => {
     throw new Error('No active connection id')
   }
 
-  return actionsProxy.connectDatabase.useQuery({ connectionId })
+  return actionsProxy.connectDatabase.invoke({ connectionId })
 }
 

@@ -29,7 +29,6 @@ function SidebarListing<T>({
   selectedItem,
   onSearch,
   renderItem,
-  skeletonCount = 5
 }: SidebarListingProps<T>) {
   return (
     <Sidebar collapsible="none" className="hidden flex-1 md:flex border-r min-w-64 max-w-64" >

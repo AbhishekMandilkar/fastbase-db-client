@@ -84,7 +84,7 @@ const useTableExplorer = () => {
       queryKey: ['table-data', tableName],
       queryFn: fetchTableData,
       enabled: Boolean(tableName && selectedSchema),
-      throwOnError(error, query) {
+      throwOnError(error) {
         console.error('Error fetching table data:', error)
         return false
       },

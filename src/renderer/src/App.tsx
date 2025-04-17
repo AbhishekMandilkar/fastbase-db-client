@@ -1,5 +1,5 @@
 import { ThemeProvider } from 'next-themes'
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router'
+import {  Route, Routes, Navigate, HashRouter } from 'react-router'
 import Connections from './pages/connections/connections'
 import { SidebarProvider } from './components/ui/sidebar'
 import { QueryClientProvider } from '@tanstack/react-query'
@@ -16,7 +16,7 @@ function App(): JSX.Element {
   return (
     <main className="max-h-screen flex flex-col overflow-hidden">
       <Provider store={store}>
-        <BrowserRouter>
+        <HashRouter>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <QueryClientProvider client={queryClient}>
                 <Routes>
@@ -34,7 +34,7 @@ function App(): JSX.Element {
                 </Routes>
             </QueryClientProvider>
           </ThemeProvider>
-        </BrowserRouter>
+        </HashRouter>
       </Provider>
       <Toaster visibleToasts={1} richColors position="bottom-right" />
     </main>

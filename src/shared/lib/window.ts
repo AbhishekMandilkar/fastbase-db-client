@@ -1,7 +1,11 @@
-import {BrowserWindow, shell} from 'electron'
-import icon from '../../../resources/icon.png?asset'
-import {join} from 'path'
-import {is} from '@electron-toolkit/utils'
+import { BrowserWindow, shell } from 'electron'
+import { join } from 'path'
+import { is } from '@electron-toolkit/utils'
+import { fileURLToPath } from 'url'
+import { dirname } from 'path'
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
 
 export type WindowId = 'main' | 'updater'
 
@@ -14,23 +18,23 @@ export function createWindow() {
     height: 670,
     show: false,
     autoHideMenuBar: false,
-    icon,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false,
+      sandbox: false
     },
     titleBarStyle: 'default',
     // expose window controlls in Windows/Linux
     ...(process.platform !== 'darwin' ? { titleBarOverlay: true } : {})
   })
 
-  windows.set('main', mainWindow);
+  windows.set('main', mainWindow)
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })
-
-  mainWindow.webContents.openDevTools()
+  if (is.dev) {
+    mainWindow.webContents.openDevTools()
+  }
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
@@ -42,14 +46,12 @@ export function createWindow() {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
-    const __filename = new URL(import.meta.url).pathname
-    
-    mainWindow.loadFile(join(__filename, '../renderer/index.html'))
+   
+    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 
   return mainWindow
 }
-
 
 export const createMainWindow = () => {
   const window = windows.get('main')

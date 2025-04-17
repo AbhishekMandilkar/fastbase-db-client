@@ -7,7 +7,7 @@ import useSqlQuery from '../hooks/use-sql-query'
 
 const useSqlEditor = () => {
   const [code, setCode] = useState(`SELECT * FROM users`);
-  const [results, setResults] = useState<QueryDatabaseResult<any>[]>([]);
+  const [results, setResults] = useState<QueryDatabaseResult[]>([]);
   const { theme } = useTheme()
   const isDarkMode = theme === 'dark'
   const {handleQuery, isPending} = useSqlQuery();
